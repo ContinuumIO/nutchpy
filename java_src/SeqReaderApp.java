@@ -15,13 +15,15 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
 
+
+
 public class SeqReaderApp {
     private int nrows = 5;
 
 
     public static List head(int nrows, String path) throws IOException  {
 
-        List<String> rows=new ArrayList<String>();
+        List<List> rows=new ArrayList<List>();
 
         Configuration conf = NutchConfiguration.create();
         FileSystem fs = FileSystem.get(conf);
@@ -39,7 +41,14 @@ public class SeqReaderApp {
         for(int i = 0; i < nrows; i = i+1) {
             reader.next(key, value);
             try {
-                rows.add(key + ": " + value.toString());
+
+                //hack JAVA tuple construction
+                //need to keep types simple for python conversion
+                List<String> t_row =new ArrayList<String>();
+
+                t_row.add(key.toString());
+                t_row.add(value.toString());
+                rows.add(t_row);
             }
             catch (Exception e) {
             }
@@ -50,7 +59,7 @@ public class SeqReaderApp {
 
     public static List slice(long start, long stop, String path) throws IOException  {
 
-        List<String> rows=new ArrayList<String>();
+        List<List> rows=new ArrayList<List>();
 
         Configuration conf = NutchConfiguration.create();
         FileSystem fs = FileSystem.get(conf);
@@ -68,11 +77,19 @@ public class SeqReaderApp {
         //reader.seek(start);
         for(long i = 0; i < start; i = i+1) {
            reader.next(key,value);
-        }	
+        }
+
         for(long i = start; i < stop; i = i+1) {
             reader.next(key, value);
             try {
-                rows.add(key + ": " + value.toString());
+
+                //hack JAVA tuple construction
+                //need to keep types simple for python conversion
+                List<String> t_row =new ArrayList<String>();
+
+                t_row.add(key.toString());
+                t_row.add(value.toString());
+                rows.add(t_row);
             }
             catch (Exception e) {
             }
