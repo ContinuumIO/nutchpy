@@ -1,26 +1,27 @@
 
 ## Install
 - https://github.com/ContinuumIO/nutchpy.git
-- conda install -c blaze apache-maven
-- cd seqreader-app/
-- mvn package
- - create single jar with dependencies
- - `java -jar target/seqreader-app-1.0-SNAPSHOT-jar-with-dependencies.jar`
+- cd nutchpy; python setup.py install;
 
+- conda install -c blaze apache-maven
 ## Running
 
 ```python
-from py4j.java_gateway import JavaGateway
-gateway = JavaGateway()
+import nutchpy
 
-seq_reader = gateway.entry_point
-node_path = "FULL-PATH/nodes/part-00000/data"
+node_path = "<FULL-PATH>/data"
+seq_reader = nutchpy.seq_reader
 print(seq_reader.head(10,node_path))
 print(seq_reader.slice(10,20,node_path))
 ```
 
-## Requirements
+## Run Requirements
 
 - JDK 1.6+
 - python
 - py4j
+
+## Build Requirements
+
+- python
+- apache-mave (`conda install -c blaze apache-maven`)

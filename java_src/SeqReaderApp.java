@@ -1,3 +1,5 @@
+package com.continuumio.seqreaderapp;
+
 import org.apache.hadoop.io.Writable;
 import org.apache.nutch.util.NutchConfiguration;
 import org.apache.hadoop.util.ReflectionUtils;
