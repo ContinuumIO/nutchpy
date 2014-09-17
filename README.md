@@ -1,9 +1,11 @@
 
 ## Install
 - https://github.com/ContinuumIO/nutchpy.git
-- cd java_src
-- ./build.sh 
- - this creates a java class and starts the py4j Gateway
+- conda install -c blaze apache-maven
+- cd seqreader-app/
+- mvn package
+ - create single jar with dependencies
+ - `java -jar target/seqreader-app-1.0-SNAPSHOT-jar-with-dependencies.jar`
 
 ## Running
 
