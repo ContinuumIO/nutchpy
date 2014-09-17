@@ -1,0 +1,19 @@
+package:
+  name: nutchpy
+  version: "0.1"
+
+build:
+    number: {{environ.get('BINSTAR_BUILD', 1)}}
+
+requirements:
+  build:
+    - python
+    - apache-maven
+
+  run:
+    - python
+    - py4j
+
+about:
+  home: http://github.com/ContinuumIO/nutchpy
+  license: BSD
