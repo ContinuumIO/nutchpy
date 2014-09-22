@@ -11,7 +11,8 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import py4j.GatewayServer;
 
 import java.util.List;
@@ -101,13 +102,36 @@ public class App {
     }
 
     public static void main(String[] args) {
-
-        App app = new App();
-        // app is now the gateway.entry_point
-        GatewayServer server = new GatewayServer(app);
+        int port;
+        boolean dieOnBrokenPipe = false;
+        String usage = "usage: [--die-on-broken-pipe] port";
+        if (args.length == 0) {
+            System.err.println(usage);
+            System.exit(1);
+        } else if (args.length == 2) {
+            if (!args[0].equals("--die-on-broken-pipe")) {
+                System.err.println(usage);
+                System.exit(1);
+            }
+            dieOnBrokenPipe = true;
+        }
+        port = Integer.parseInt(args[args.length - 1]);
+        GatewayServer server = new GatewayServer(new App(), port);
         server.start();
-
+        int listening_port = server.getListeningPort();
+        System.out.println("" + listening_port);
+        if (dieOnBrokenPipe) {
+            /* Exit on EOF or broken pipe.  This ensures that the server dies
+             * if its parent program dies. */
+            BufferedReader stdin = new BufferedReader(
+                    new InputStreamReader(System.in));
+            try {
+                stdin.readLine();
+                System.exit(0);
+            } catch (java.io.IOException e) {
+                System.exit(1);
+            }
+        }
     }
-
 }
 

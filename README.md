@@ -4,6 +4,7 @@
 - cd nutchpy; python setup.py install;
 
 - conda install -c blaze apache-maven
+
 ## Running
 
 ```python
@@ -24,4 +25,4 @@ print(seq_reader.slice(10,20,node_path))
 ## Build Requirements
 
 - python
-- apache-mave (`conda install -c blaze apache-maven`)
+- apache-maven (`conda install -c blaze apache-maven`)
