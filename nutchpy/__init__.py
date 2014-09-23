@@ -37,7 +37,7 @@ logger.debug(java_cmd)
 port = int(ps.stdout.readline())
 
 
-gateway = JavaGateway(GatewayClient(port=port, auto_close=True),)
+gateway = JavaGateway(GatewayClient(port=port, auto_close=True),auto_convert=True)
 logger.info("JAVA GATEWAY STARTED ON PORT: %d"% (port,) )
 
 seq_reader = gateway.entry_point
