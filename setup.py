@@ -125,7 +125,11 @@ if not 'nojava' in sys.argv:
     os.chdir("..")
     jar_file = os.path.join(JAVA_SRC,"target",
                             "seqreader-app-1.0-SNAPSHOT-jar-with-dependencies.jar")
-    shutil.copy(jar_file,os.path.join("nutchpy","java_libs"))
+
+    java_lib_dir = os.path.join("nutchpy","java_libs")
+    if not os.path.exists(java_lib_dir):
+        os.mkdir(java_lib_dir)
+    shutil.copy(jar_file,java_lib_dir)
 else:
     assert 'nojava' == sys.argv.pop(2)
 
