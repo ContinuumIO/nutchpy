@@ -44,6 +44,7 @@ public class App {
     }
 
     public static List head(int nrows, String path) throws IOException  {
+        // read first nrows from sequence file
 
         List<List> rows=new ArrayList<List>();
 
@@ -56,9 +57,9 @@ public class App {
         SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
 
         Writable key = (Writable)
-            ReflectionUtils.newInstance(reader.getKeyClass(), conf);
+                ReflectionUtils.newInstance(reader.getKeyClass(), conf);
         Writable value = (Writable)
-            ReflectionUtils.newInstance(reader.getValueClass(), conf);
+                ReflectionUtils.newInstance(reader.getValueClass(), conf);
 
         for(int i = 0; i < nrows; i = i+1) {
             reader.next(key, value);
@@ -79,7 +80,44 @@ public class App {
         return rows;
     }
 
+    public static List read(String path) throws IOException  {
+        // reads the entire contents of the file
+
+        List<List> rows=new ArrayList<List>();
+
+        Configuration conf = NutchConfiguration.create();
+        FileSystem fs = FileSystem.get(conf);
+
+        Path file = new Path(path);
+        System.out.println(file);
+
+        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+
+        Writable key = (Writable)
+                ReflectionUtils.newInstance(reader.getKeyClass(), conf);
+        Writable value = (Writable)
+                ReflectionUtils.newInstance(reader.getValueClass(), conf);
+
+        while(reader.next(key, value)) {
+            try {
+
+                //hack JAVA tuple construction
+                //need to keep types simple for python conversion
+                List<String> t_row =new ArrayList<String>();
+
+                t_row.add(key.toString());
+                t_row.add(value.toString());
+                rows.add(t_row);
+            }
+            catch (Exception e) {
+            }
+        }
+
+        return rows;
+    }
+
     public static List slice(long start, long stop, String path) throws IOException  {
+        //read rows between start and stop
 
         List<List> rows=new ArrayList<List>();
 
@@ -122,6 +160,7 @@ public class App {
 
 
     public static void write(HashMap hashMap, String filepath) throws IOException  {
+        // Write dictionary/HashMap to Sequencefile
         System.out.println(filepath);
 
 //        Writable key = (Writable)

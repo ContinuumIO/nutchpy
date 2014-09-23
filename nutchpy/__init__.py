@@ -8,7 +8,6 @@ import os
 import subprocess
 import time
 import py4j
-from py4j.java_gateway import JavaGateway, GatewayClient, launch_gateway
 
 from py4j.java_gateway import JavaGateway, GatewayClient, launch_gateway, java_import
 
