@@ -61,8 +61,11 @@ public class App {
         Writable value = (Writable)
                 ReflectionUtils.newInstance(reader.getValueClass(), conf);
 
-        for(int i = 0; i < nrows; i = i+1) {
-            reader.next(key, value);
+        int i = 0;
+        while(reader.next(key, value)) {
+            if (i == nrows) {
+                break;
+            }
             try {
 
                 //hack JAVA tuple construction
@@ -72,9 +75,12 @@ public class App {
                 t_row.add(key.toString());
                 t_row.add(value.toString());
                 rows.add(t_row);
+            }  catch (Exception e) {
+                //figure out something to do
+                // how to pass messags back upstream to python
             }
-            catch (Exception e) {
-            }
+            i += 1;
+
         }
 
         return rows;
@@ -134,13 +140,22 @@ public class App {
         Writable value = (Writable)
                 ReflectionUtils.newInstance(reader.getValueClass(), conf);
 
-        //reader.seek(start);
-        for(long i = 0; i < start; i = i+1) {
-            reader.next(key,value);
+
+        //skip rows
+        long i = 0;
+        while(reader.next(key, value)) {
+            if (i == start) {
+                break;
+            }
+            i += 1;
         }
 
-        for(long i = start; i < stop; i = i+1) {
-            reader.next(key, value);
+        //reset back to 0 for
+        i = start;
+        while(reader.next(key, value)) {
+            if (i == stop) {
+                break;
+            }
             try {
 
                 //hack JAVA tuple construction
@@ -153,6 +168,7 @@ public class App {
             }
             catch (Exception e) {
             }
+            i += 1;
         }
 
         return rows;

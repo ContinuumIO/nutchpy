@@ -26,7 +26,7 @@ port = int(os.getenv('NUTCHPY_GATEWAY_PORT',0))
 
 cmd_dict = {"jar_full": jar_full, "main_class": main_class, 'port': port}
 
-java_cmd = "/usr/bin/java -cp ::{jar_full} -Xms512m -Xmx512m {main_class} {port}".format(**cmd_dict)
+java_cmd = "/usr/bin/java -cp ::{jar_full} -Xms512m -Xmx512m {main_class} --die-on-broken-pipe {port}".format(**cmd_dict)
 ps = subprocess.Popen(java_cmd, shell=os.name != 'nt',
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
