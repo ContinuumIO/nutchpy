@@ -138,4 +138,31 @@ public class OutlinkReader {
     }
 
 
+    public static long count(String path) throws IOException  {
+        //read rows between start and stop
+
+        Configuration conf = NutchConfiguration.create();
+        FileSystem fs = FileSystem.get(conf);
+
+        Path file = new Path(path);
+        System.out.println(file);
+
+        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+
+        Writable key = (Writable)
+                ReflectionUtils.newInstance(reader.getKeyClass(), conf);
+        Writable value = (Writable)
+                ReflectionUtils.newInstance(reader.getValueClass(), conf);
+
+
+        //skip rows
+        long i = 0;
+
+
+        while(reader.next(key, value)) {
+            i += 1;
+        }
+        return i;
+    }
+
 }

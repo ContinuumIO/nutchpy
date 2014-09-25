@@ -18,4 +18,5 @@ data = nutchpy.sequence_reader.read(path)
 assert len(data) == 8
 
 
-
+count = nutchpy.sequence_reader.count(path)
+assert count == 8

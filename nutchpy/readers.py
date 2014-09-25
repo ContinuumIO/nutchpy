@@ -18,6 +18,9 @@ class GeneralReader(object):
     def slice(self, start, stop, path):
         pass
 
+    def count(self, path):
+        pass
+
 
 class SequenceReader(GeneralReader):
     """
@@ -84,6 +87,26 @@ class SequenceReader(GeneralReader):
         data = self.seq_reader.slice(start, stop, path)
         if auto_convert:
             data = [list(d) for d in data]
+
+        return data
+
+    def count(self,path=None, auto_convert=True):
+        """
+        method to count number of rows in a sequence file
+
+        Parameters
+        ----------
+        path : str
+
+        Returns
+        -------
+        long
+
+        """
+
+        count = self.seq_reader.count(path)
+        if auto_convert:
+            data = long(count)
 
         return data
 
@@ -155,6 +178,27 @@ class OutlinksReader(GeneralReader):
             data = [dict(d) for d in data]
 
         return data
+
+    def count(self,path=None, auto_convert=True):
+        """
+        method to count number of rows in a sequence file
+
+        Parameters
+        ----------
+        path : str
+
+        Returns
+        -------
+        long
+
+        """
+
+        count = self.outlinks_reader.count(path)
+        if auto_convert:
+            data = long(count)
+
+        return data
+
 
 sequence_reader = SequenceReader()
 outlinks_reader = OutlinksReader()
