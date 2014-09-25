@@ -85,7 +85,7 @@ class OutlinksReader(GeneralReader):
 
     def __init__(self):
         #grab object from jvm
-        self.outlinks_reader = self.gateway.jvm.OutlinksReader
+        self.outlinks_reader = self.gateway.jvm.OutlinkReader
         self.schema = '{timestamp: int64, key_url: string, score: float64, ' \
                       'url: string, linktype: string, anchor: string}'
 
