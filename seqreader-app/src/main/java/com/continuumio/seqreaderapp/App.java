@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.apache.nutch.scoring.webgraph.LinkDatum;
+
 public class App {
     private int nrows = 5;
 
@@ -42,138 +44,6 @@ public class App {
         }
         return new_obj;
     }
-
-    public static List head(int nrows, String path) throws IOException  {
-        // read first nrows from sequence file
-
-        List<List> rows=new ArrayList<List>();
-
-        Configuration conf = NutchConfiguration.create();
-        FileSystem fs = FileSystem.get(conf);
-
-        Path file = new Path(path);
-        System.out.println(file);
-
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
-
-        Writable key = (Writable)
-                ReflectionUtils.newInstance(reader.getKeyClass(), conf);
-        Writable value = (Writable)
-                ReflectionUtils.newInstance(reader.getValueClass(), conf);
-
-        int i = 0;
-        while(reader.next(key, value)) {
-            if (i == nrows) {
-                break;
-            }
-            try {
-
-                //hack JAVA tuple construction
-                //need to keep types simple for python conversion
-                List<String> t_row =new ArrayList<String>();
-
-                t_row.add(key.toString());
-                t_row.add(value.toString());
-                rows.add(t_row);
-            }  catch (Exception e) {
-                //figure out something to do
-                // how to pass messags back upstream to python
-            }
-            i += 1;
-
-        }
-
-        return rows;
-    }
-
-    public static List read(String path) throws IOException  {
-        // reads the entire contents of the file
-
-        List<List> rows=new ArrayList<List>();
-
-        Configuration conf = NutchConfiguration.create();
-        FileSystem fs = FileSystem.get(conf);
-
-        Path file = new Path(path);
-        System.out.println(file);
-
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
-
-        Writable key = (Writable)
-                ReflectionUtils.newInstance(reader.getKeyClass(), conf);
-        Writable value = (Writable)
-                ReflectionUtils.newInstance(reader.getValueClass(), conf);
-
-        while(reader.next(key, value)) {
-            try {
-
-                //hack JAVA tuple construction
-                //need to keep types simple for python conversion
-                List<String> t_row =new ArrayList<String>();
-
-                t_row.add(key.toString());
-                t_row.add(value.toString());
-                rows.add(t_row);
-            }
-            catch (Exception e) {
-            }
-        }
-
-        return rows;
-    }
-
-    public static List slice(long start, long stop, String path) throws IOException  {
-        //read rows between start and stop
-
-        List<List> rows=new ArrayList<List>();
-
-        Configuration conf = NutchConfiguration.create();
-        FileSystem fs = FileSystem.get(conf);
-
-        Path file = new Path(path);
-        System.out.println(file);
-
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
-
-        Writable key = (Writable)
-                ReflectionUtils.newInstance(reader.getKeyClass(), conf);
-        Writable value = (Writable)
-                ReflectionUtils.newInstance(reader.getValueClass(), conf);
-
-
-        //skip rows
-        long i = 0;
-        while(reader.next(key, value)) {
-            if (i == start) {
-                break;
-            }
-            i += 1;
-        }
-
-        //reset back to 0 for
-        i = start;
-        while(reader.next(key, value)) {
-            if (i == stop) {
-                break;
-            }
-            try {
-
-                //hack JAVA tuple construction
-                //need to keep types simple for python conversion
-                List<String> t_row =new ArrayList<String>();
-
-                t_row.add(key.toString());
-                t_row.add(value.toString());
-                rows.add(t_row);
-            }
-            catch (Exception e) {
-            }
-            i += 1;
-        }
-
-        return rows;
-    }
-
 
     public static void write(HashMap hashMap, String filepath) throws IOException  {
         // Write dictionary/HashMap to Sequencefile
@@ -238,12 +108,6 @@ public class App {
 
 
     public static void main(String[] args) {
-//        SequenceWriter sequenceWriter = new SequenceWriter();
-//        try {
-////            sequenceWriter.write_seq();
-//        } catch (Exception e) {
-//            System.out.println("ERROR!!!!!");
-//        }
 
         int port;
         boolean dieOnBrokenPipe = false;
