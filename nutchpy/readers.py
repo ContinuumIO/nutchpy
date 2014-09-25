@@ -28,7 +28,7 @@ class SequenceReader(GeneralReader):
         #grab object from jvm
         self.seq_reader = self.gateway.jvm.SequenceReader
 
-    def read(self, path=None):
+    def read(self, path=None, auto_convert=True):
         """
         method to read entire contents of a sequence file
 
@@ -42,9 +42,12 @@ class SequenceReader(GeneralReader):
         """
 
         data = self.seq_reader.read(path)
+        if auto_convert:
+            data = [list(d) for d in data]
+
         return data
 
-    def head(self, nrows=5, path=None):
+    def head(self, nrows=5, path=None, auto_convert=True):
         """
         method to read first n-rows of a sequence file
 
@@ -59,9 +62,12 @@ class SequenceReader(GeneralReader):
         """
 
         data = self.seq_reader.head(nrows, path)
+        if auto_convert:
+            data = [list(d) for d in data]
+
         return data
 
-    def slice(self, start, stop, path=None):
+    def slice(self, start, stop, path=None, auto_convert=True):
         """
         method to slice (start, stop) contents of a sequence file
 
@@ -76,6 +82,9 @@ class SequenceReader(GeneralReader):
         """
 
         data = self.seq_reader.slice(start, stop, path)
+        if auto_convert:
+            data = [list(d) for d in data]
+
         return data
 
 class OutlinksReader(GeneralReader):
@@ -89,7 +98,7 @@ class OutlinksReader(GeneralReader):
         self.schema = '{timestamp: int64, key_url: string, score: float64, ' \
                       'url: string, linktype: string, anchor: string}'
 
-    def read(self, path=None):
+    def read(self, path=None, auto_convert=True):
         """
         method to read entire contents of an outlinks file
 
@@ -103,9 +112,11 @@ class OutlinksReader(GeneralReader):
         """
 
         data = self.outlinks_reader.read(path)
+        if auto_convert:
+            data = [dict(d) for d in data]
         return data
 
-    def head(self, nrows=5, path=None):
+    def head(self, nrows=5, path=None, auto_convert=True):
         """
         method to read first n-rows of an outlinks file
 
@@ -120,9 +131,12 @@ class OutlinksReader(GeneralReader):
         """
 
         data = self.outlinks_reader.head(nrows, path)
+        if auto_convert:
+            data = [dict(d) for d in data]
+
         return data
 
-    def slice(self, start, stop, path=None):
+    def slice(self, start, stop, path=None, auto_convert=True):
         """
         method to slice (start, stop) contents of an outlinks file
 
@@ -137,6 +151,9 @@ class OutlinksReader(GeneralReader):
         """
 
         data = self.outlinks_reader.slice(start, stop, path)
+        if auto_convert:
+            data = [dict(d) for d in data]
+
         return data
 
 sequence_reader = SequenceReader()

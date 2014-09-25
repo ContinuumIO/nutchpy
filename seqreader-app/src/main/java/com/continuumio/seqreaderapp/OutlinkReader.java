@@ -16,6 +16,7 @@ import java.util.List;
 
 
 public class OutlinkReader {
+    private int nrows = 5;
 
     public static HashMap<String, String> getOutlinksRow(Writable key, LinkDatum value) {
         HashMap<String, String> t_row = new HashMap<String, String>();
