@@ -197,11 +197,8 @@ class NodeReader(GeneralReader):
         #grab object from jvm
         self.reader = self.gateway.jvm.NodeReader
         self.schema = '{key_url: string, num_inlinks: int64, num_outlinks: int64, ' \
-                      'inlink_score: float, outlink_score: float64, metadata: string}'
+                      'inlink_score: float64, outlink_score: float64, metadata: string}'
 
-
-    def hello(self):
-        self.reader.hello()
 
 sequence_reader = SequenceReader()
 link_reader = LinkReader()
