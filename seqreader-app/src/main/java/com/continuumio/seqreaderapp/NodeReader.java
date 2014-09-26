@@ -6,8 +6,8 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.util.ReflectionUtils;
-import org.apache.nutch.scoring.webgraph.LinkDatum;
 import org.apache.nutch.util.NutchConfiguration;
+import org.apache.nutch.scoring.webgraph.Node;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,17 +15,17 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class OutlinkReader {
+public class NodeReader {
     private int nrows = 5;
 
-    public static HashMap<String, String> getOutlinksRow(Writable key, LinkDatum value) {
+    public static HashMap<String, String> getNodeRow(Writable key, Node value) {
         HashMap<String, String> t_row = new HashMap<String, String>();
         t_row.put("key_url", key.toString());
-        t_row.put("url", value.getUrl());
-        t_row.put("anchor", value.getAnchor());
-        t_row.put("score", String.valueOf(value.getScore()));
-        t_row.put("timestamp", String.valueOf(value.getTimestamp()));
-        t_row.put("linktype", String.valueOf(value.getLinkType()));
+        t_row.put("num_inlinks", String.valueOf(value.getNumInlinks()) );
+        t_row.put("num_outlinks", String.valueOf(value.getNumOutlinks()) );
+        t_row.put("inlink_score", String.valueOf(value.getInlinkScore()));
+        t_row.put("outlink_score", String.valueOf(value.getOutlinkScore()));
+        t_row.put("metadata", value.getMetadata().toString());
 
         return t_row;
     }
@@ -45,11 +45,11 @@ public class OutlinkReader {
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
-        LinkDatum value = new LinkDatum();
+        Node value = new Node();
 
         while(reader.next(key, value)) {
             try {
-                HashMap<String, String> t_row = getOutlinksRow(key,value);
+                HashMap<String, String> t_row = getNodeRow(key,value);
                 rows.add(t_row);
             }
             catch (Exception e) {
@@ -73,7 +73,7 @@ public class OutlinkReader {
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
-        LinkDatum value = new LinkDatum();
+        Node value = new Node();
 
         int i = 0;
         while(reader.next(key, value)) {
@@ -83,7 +83,7 @@ public class OutlinkReader {
             }
             i += 1;
             try {
-                HashMap<String, String> t_row = getOutlinksRow(key,value);
+                HashMap<String, String> t_row = getNodeRow(key,value);
                 rows.add(t_row);
             }
             catch (Exception e) {
@@ -107,7 +107,7 @@ public class OutlinkReader {
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
-        LinkDatum value = new LinkDatum();
+        Node value = new Node();
 
         //skip rows
         long i = 0;
@@ -126,7 +126,7 @@ public class OutlinkReader {
             i += 1;
 
             try {
-                HashMap<String, String> t_row = getOutlinksRow(key,value);
+                HashMap<String, String> t_row = getNodeRow(key,value);
                 rows.add(t_row);
 
             }

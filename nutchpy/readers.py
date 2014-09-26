@@ -9,17 +9,83 @@ from .JVM import gateway
 class GeneralReader(object):
     gateway = gateway
 
-    def read(self, path=None):
-        pass
+    def read(self, path=None, auto_convert=True):
+        """
+        method to read entire contents of a file
 
-    def head(self, nrows=5, path=None):
-        pass
+        Parameters
+        ----------
+        path : str
 
-    def slice(self, start, stop, path):
-        pass
+        Returns
+        -------
+        list of strings
+        """
 
-    def count(self, path):
-        pass
+        data = self.reader.read(path)
+        if auto_convert:
+            data = [dict(d) for d in data]
+        return data
+
+    def head(self, nrows=5, path=None, auto_convert=True):
+        """
+        method to read first n-rows of a file
+
+        Parameters
+        ----------
+        nrows : int
+        path : str
+
+        Returns
+        -------
+        list of strings
+        """
+
+        data = self.reader.head(nrows, path)
+        if auto_convert:
+            data = [dict(d) for d in data]
+
+        return data
+
+    def slice(self, start, stop, path=None, auto_convert=True):
+        """
+        method to slice (start, stop) contents of a file
+
+        Parameters
+        ----------
+        nrows : int
+        path : str
+
+        Returns
+        -------
+        list of strings
+        """
+
+        data = self.reader.slice(start, stop, path)
+        if auto_convert:
+            data = [dict(d) for d in data]
+
+        return data
+
+    def count(self,path=None, auto_convert=True):
+        """
+        method to count number of rows in a file
+
+        Parameters
+        ----------
+        path : str
+
+        Returns
+        -------
+        long
+
+        """
+
+        count = self.reader.count(path)
+        if auto_convert:
+            data = long(count)
+
+        return data
 
 
 class SequenceReader(GeneralReader):
@@ -29,7 +95,7 @@ class SequenceReader(GeneralReader):
 
     def __init__(self):
         #grab object from jvm
-        self.seq_reader = self.gateway.jvm.SequenceReader
+        self.reader = self.gateway.jvm.SequenceReader
 
     def read(self, path=None, auto_convert=True):
         """
@@ -44,7 +110,7 @@ class SequenceReader(GeneralReader):
         list of strings
         """
 
-        data = self.seq_reader.read(path)
+        data = self.reader.read(path)
         if auto_convert:
             data = [list(d) for d in data]
 
@@ -64,7 +130,7 @@ class SequenceReader(GeneralReader):
         list of strings
         """
 
-        data = self.seq_reader.head(nrows, path)
+        data = self.reader.head(nrows, path)
         if auto_convert:
             data = [list(d) for d in data]
 
@@ -84,7 +150,7 @@ class SequenceReader(GeneralReader):
         list of strings
         """
 
-        data = self.seq_reader.slice(start, stop, path)
+        data = self.reader.slice(start, stop, path)
         if auto_convert:
             data = [list(d) for d in data]
 
@@ -104,101 +170,39 @@ class SequenceReader(GeneralReader):
 
         """
 
-        count = self.seq_reader.count(path)
+        count = self.reader.count(path)
         if auto_convert:
             data = long(count)
 
         return data
 
-class OutlinksReader(GeneralReader):
+class LinkReader(GeneralReader):
     """
-    Generalized sequence file reader
+    Link Reader
     """
 
     def __init__(self):
         #grab object from jvm
-        self.outlinks_reader = self.gateway.jvm.OutlinkReader
-        self.schema = '{timestamp: int64, key_url: string, score: float64, ' \
-                      'url: string, linktype: string, anchor: string}'
+        self.reader = self.gateway.jvm.LinkReader
+        self.schema = '{key_url: string, url: string, anchor: string, score: float64, ' \
+                      'timestamp: int64, linktype: string}'
 
-    def read(self, path=None, auto_convert=True):
-        """
-        method to read entire contents of an outlinks file
 
-        Parameters
-        ----------
-        path : str
+class NodeReader(GeneralReader):
+    """
+    Link Reader
+    """
 
-        Returns
-        -------
-        list of strings
-        """
+    def __init__(self):
+        #grab object from jvm
+        self.reader = self.gateway.jvm.NodeReader
+        self.schema = '{key_url: string, num_inlinks: int64, num_outlinks: int64, ' \
+                      'inlink_score: float, outlink_score: float64, metadata: string}'
 
-        data = self.outlinks_reader.read(path)
-        if auto_convert:
-            data = [dict(d) for d in data]
-        return data
 
-    def head(self, nrows=5, path=None, auto_convert=True):
-        """
-        method to read first n-rows of an outlinks file
-
-        Parameters
-        ----------
-        nrows : int
-        path : str
-
-        Returns
-        -------
-        list of strings
-        """
-
-        data = self.outlinks_reader.head(nrows, path)
-        if auto_convert:
-            data = [dict(d) for d in data]
-
-        return data
-
-    def slice(self, start, stop, path=None, auto_convert=True):
-        """
-        method to slice (start, stop) contents of an outlinks file
-
-        Parameters
-        ----------
-        nrows : int
-        path : str
-
-        Returns
-        -------
-        list of strings
-        """
-
-        data = self.outlinks_reader.slice(start, stop, path)
-        if auto_convert:
-            data = [dict(d) for d in data]
-
-        return data
-
-    def count(self,path=None, auto_convert=True):
-        """
-        method to count number of rows in a sequence file
-
-        Parameters
-        ----------
-        path : str
-
-        Returns
-        -------
-        long
-
-        """
-
-        count = self.outlinks_reader.count(path)
-        if auto_convert:
-            data = long(count)
-
-        return data
-
+    def hello(self):
+        self.reader.hello()
 
 sequence_reader = SequenceReader()
-outlinks_reader = OutlinksReader()
+link_reader = LinkReader()
+node_reader = NodeReader()

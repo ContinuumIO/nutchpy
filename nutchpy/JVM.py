@@ -46,7 +46,8 @@ def launch_gateway():
     gateway = JavaGateway(GatewayClient(port=port),auto_convert=True)
     logger.info("JAVA GATEWAY STARTED ON PORT: %d"% (port,) )
 
-    java_import(gateway.jvm, 'com.continuumio.seqreaderapp.OutlinkReader')
+    java_import(gateway.jvm, 'com.continuumio.seqreaderapp.LinkReader')
+    java_import(gateway.jvm, 'com.continuumio.seqreaderapp.NodeReader')
     java_import(gateway.jvm, 'com.continuumio.seqreaderapp.SequenceReader')
 
     ## STOLEN SHAMELESS FROM APACHE/SPARK
