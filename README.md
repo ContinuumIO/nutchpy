@@ -1,9 +1,8 @@
 
 ## Install
 - https://github.com/ContinuumIO/nutchpy.git
-- cd nutchpy; python setup.py install;
-
 - conda install -c blaze apache-maven
+- cd nutchpy; python setup.py install;
 
 ## Running
 
