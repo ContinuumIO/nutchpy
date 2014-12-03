@@ -1,8 +1,19 @@
 
 ## Install
-- https://github.com/ContinuumIO/nutchpy.git
-- conda install -c blaze apache-maven
-- cd nutchpy; python setup.py install;
+
+To build `nutchpy` from source, run the following commands in your terminal:
+
+```bash
+  git clone https://github.com/ContinuumIO/nutchpy.git
+  conda install -c blaze apache-maven
+  cd nutchpy; python setup.py install;
+```
+
+Alternatively, you can download `nutchpy` from [binstar](https://binstar.org/) with [conda](http://conda.pydata.org/):
+
+```bash
+  conda install -c blaze nutchpy
+```
 
 ## Running
 
