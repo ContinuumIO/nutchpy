@@ -1,0 +1,18 @@
+
+package:
+    name: nutch
+    version: 1.9
+
+source:
+    git_url: https://github.com/apache/nutch.git
+    
+build:
+    number: 0
+
+# test:
+#     commands:
+#         - crawl -help
+
+about:
+    home: http://nutch.apache.org/
+    license: Apache 2.0 license
