@@ -9,9 +9,9 @@ source:
 build:
     number: 0
 
-# test:
-#     commands:
-#         - crawl -help
+test:
+    commands:
+        - nutch
 
 about:
     home: http://nutch.apache.org/

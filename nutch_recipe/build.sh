@@ -1,6 +1,12 @@
 #!/bin/bash
 
-export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home
+if [ "$(uname)" == "Darwin" ]; then
+    export JAVA_HOME=$(/usr/libexec/java_home)
+    export JRE_HOME=${JAVA_HOME}/jre
+else
+    export JAVA_HOME="/usr/lib/jvm/java"
+    export JRE_HOME="/usr/lib/jvm/jre"
+fi
 
 mkdir -vp ${PREFIX}/bin;
 mkdir -vp ${PREFIX}/lib;
