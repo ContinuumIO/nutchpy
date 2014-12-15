@@ -1,0 +1,20 @@
+package:
+    name: solr 
+    version: 4.10.2
+
+source:
+    fn: solr-4.10.2.tgz
+    url: http://archive.apache.org/dist/lucene/solr/4.10.2/solr-4.10.2.tgz
+    md5: a24f73f70e3fcf6aa8fda67444981f78
+      
+    
+build:
+    number: 0
+
+test:
+    commands:
+        - solr
+
+about:
+    home: http://lucene.apache.org/solr/
+    license: Apache 2.0 license
