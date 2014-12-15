@@ -15,12 +15,14 @@ mkdir -vp ${SOLR_INSTALL};
 
 cp -r bin/* ${PREFIX}/bin
 cp -r example/* ${SOLR_INSTALL}
-ls ${SOLR_CONF}
+
+#adding log dir
+mkdir -vp ${SOLR_INSTALL}/logs
+touch ${SOLR_INSTALL}/logs/empty
 
 SOLR_CONF=${SOLR_INSTALL}/solr/collection1/conf
 
 mv ${SOLR_CONF}/schema.xml ${SOLR_CONF}/schema.xml.org
-cp ${RECIPE_DIR}/schema.xml ${PREFIX}/solr_pkg/solr/collection1/conf/
+cp ${RECIPE_DIR}/schema.xml ${SOLR_CONF}/
+ls ${SOLR_INSTALL}
 
-#adding log dir
-mkdir -vp ${SOLR_INSTALL}/logs
