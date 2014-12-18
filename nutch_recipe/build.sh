@@ -4,10 +4,9 @@ if [ "$(uname)" == "Darwin" ]; then
     export JAVA_HOME=$(/usr/libexec/java_home)
     export JRE_HOME=${JAVA_HOME}/jre
 else
-    export JAVA_HOME="/usr/lib/jvm/java"
-    export JRE_HOME="/usr/lib/jvm/jre"
+    export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64/"
+    export JRE_HOME="/usr/lib/jvm/java-7-openjdk-amd64/jre"
 fi
-export JAVA_HOME=/usr/lib/jvm/java-7-oracle-cloudera/
 
 mkdir -vp ${PREFIX}/bin;
 mkdir -vp ${PREFIX}/lib;

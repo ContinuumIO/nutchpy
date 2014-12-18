@@ -11,7 +11,7 @@ build:
 
 test:
     commands:
-        - nutch
+        - nutch dump -h
 
 about:
     home: http://nutch.apache.org/
