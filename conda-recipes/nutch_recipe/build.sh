@@ -22,6 +22,7 @@ cp -r bin/* ${PREFIX}/lib/nutch/bin/
 cp -r lib/* ${PREFIX}/lib/nutch/lib/
 cp -r plugins/* ${PREFIX}/lib/nutch/plugins/
 cp -r conf/* ${PREFIX}/lib/nutch/conf/
+popd
 
 cp ${RECIPE_DIR}/nutch-site.xml ${PREFIX}/lib/nutch/conf/
 
@@ -45,3 +46,6 @@ EOF
 
 chmod +x ${PREFIX}/bin/crawl || exit 1;
 chmod +x ${PREFIX}/bin/nutch || exit 1;
+
+cp ${RECIPE_DIR}/nutch-site.xml ${PREFIX}/lib/nutch/conf/nutch-site.xml
+cp ${RECIPE_DIR}/regex-urlfilter.txt ${PREFIX}/lib/nutch/conf/regex-urlfilter.txt

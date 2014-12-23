@@ -1,0 +1,15 @@
+package:
+  name: ant
+  version: 1.9.4
+
+source:
+  fn: apache-ant-1.9.4-bin.tar.bz2
+  url: http://apache.claz.org//ant/binaries/apache-ant-1.9.4-bin.tar.bz2
+  sha1: 99bff3c702dd79076f4e705e3541f7e35bbb4306
+
+build:
+  number: 1
+
+about:
+    home: http://ant.apache.org
+

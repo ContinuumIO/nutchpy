@@ -13,6 +13,7 @@ requirements:
   run:
     - python
     - py4j
+    - nutch
 
 about:
   home: http://github.com/ContinuumIO/nutchpy
