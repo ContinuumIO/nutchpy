@@ -26,5 +26,22 @@ cp -r conf/* ${PREFIX}/lib/nutch/conf/
 cp ${RECIPE_DIR}/nutch-site.xml ${PREFIX}/lib/nutch/conf/
 
 pushd "${PREFIX}/bin"
-ln -vs "../lib/nutch/bin/nutch" nutch
-ln -vs "../lib/nutch/bin/crawl" crawl
+
+cat > ${PREFIX}/bin/nutch <<EOF
+#!/bin/bash
+
+pushd ${PREFIX}/lib/nutch/
+./bin/nutch \$@
+popd
+EOF
+
+cat > ${PREFIX}/bin/crawl<<EOF
+#!/bin/bash
+
+pushd ${PREFIX}/lib/nutch/bin/
+./bin/crawl \$@
+popd
+EOF
+
+chmod +x ${PREFIX}/bin/crawl || exit 1;
+chmod +x ${PREFIX}/bin/nutch || exit 1;
