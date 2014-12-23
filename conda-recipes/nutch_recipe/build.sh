@@ -39,7 +39,7 @@ EOF
 cat > ${PREFIX}/bin/crawl<<EOF
 #!/bin/bash
 
-pushd ${PREFIX}/lib/nutch/bin/
+pushd ${PREFIX}/lib/nutch/
 ./bin/crawl \$@
 popd
 EOF
