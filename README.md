@@ -3,7 +3,7 @@
 ## Introduction
 
 Nutchpy is a Python library for working with [Apache Nutch](http://nutch.apache.org).
-In particular, the library provides functionality to work with existing Nutch data structures including various eeaders for the Nutch EcoSystem e.g. readers for [Sequence Files](http://wiki.apache.org/hadoop/SequenceFile), [LinkDb](http://nutch.apache.org/apidocs/apidocs-1.9/index.html?org/apache/nutch/crawl/LinkDb.html), [Nodes](http://nutch.apache.org/apidocs/apidocs-1.9/index.html?org/apache/nutch/scoring/webgraph/Node.html), etc.
+In particular, the library provides functionality to work with existing Nutch data structures including various readers for the Nutch EcoSystem e.g. readers for [Sequence Files](http://wiki.apache.org/hadoop/SequenceFile), [LinkDb](http://nutch.apache.org/apidocs/apidocs-1.9/index.html?org/apache/nutch/crawl/LinkDb.html), [Nodes](http://nutch.apache.org/apidocs/apidocs-1.9/index.html?org/apache/nutch/scoring/webgraph/Node.html), etc.
 A small [examples](/examples) directory exists showing how Nutchpy can be used to interact with some of the above data strutures. 
 
 ## Install
