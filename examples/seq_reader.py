@@ -20,3 +20,16 @@ assert len(data) == 8
 
 count = nutchpy.sequence_reader.count(path)
 assert count == 8
+
+docs = nutchpy.sequence_reader.buffered_read(path)
+count2 = 0
+for doc in docs:
+    count2 += 1
+
+assert count2 == count - 1 #FIXME: slice is skipping the first record https://github.com/ContinuumIO/nutchpy/issues/15
+
+limit = 3
+docs = nutchpy.sequence_reader.read_all([path], limit=limit)
+for doc in docs:
+    limit -= 1
+assert limit == 0
