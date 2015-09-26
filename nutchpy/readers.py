@@ -176,17 +176,16 @@ class SequenceReader(GeneralReader):
 
         return data
 
-    def read_all(self, paths, start=0, batch_size=20, auto_convert=True, limit=None):
+    def read_all(self, paths, start=0, auto_convert=True, limit=None):
         '''
-        Reads a stream of documents from all the segments
+        Reads a stream of documents from all the given sequence files
         :param segment_paths: list of segment paths
         :param start the starting position
-        :param batch_size: buffer size
         :return: stream of records
         '''
         count = 0
         for path in paths:
-            for rec in self.buffered_read(path, start, batch_size, auto_convert=auto_convert):
+            for rec in self.read_iterator(path, start, auto_convert=auto_convert):
                 count += 1
                 if limit and count > limit:
                     return
@@ -200,7 +199,9 @@ class SequenceReader(GeneralReader):
         '''
         if len(rec) != 2:
             raise Exception("Expected input: [key,value], given=%s" % rec)
-        datum = rec[1]
+        datum = rec[1].toString() # This object is a java object
+        #print (datum)
+        #print (type(datum))
         parts = datum.split("\n")
         doc = {}
         for part in parts:
@@ -209,21 +210,19 @@ class SequenceReader(GeneralReader):
                 doc[splits[0]] = splits[-1]
         return (rec[0], doc)
 
-    def buffered_read(self, path, start=0, batch_size=20, auto_convert=True):
+    def read_iterator(self, path, start=0, auto_convert=True):
         '''
-        Reads the sequence file records by slicing batch by batch.
-        This is a streaming reader, unlike reader.read(...) which loads whole file into memory at once
+        Creates a stream of (key:value) pairs by reading given sequence file
+        This is a streaming reader, unlike reader.read(...) which loads whole file contents
+         into memory at once
         :param path: path of the file
         :param start: the start position, default is 0
-        :param batch_size: back size default is 20
-        :return: iterator of records
+        :return: stream of records
         '''
-        max = self.count(path)
-        while start < max:
-            batch = self.slice(start, start + batch_size, path)
-            for item in batch:
-                yield self._rec_to_doc(item) if auto_convert else item
-            start = start + batch_size
+        rec_iterator = self.reader.getRecordIterator(path, start)
+        while rec_iterator.hasNext():
+            rec = rec_iterator.next()
+            yield self._rec_to_doc(list(rec)) if auto_convert else rec
 
 class LinkReader(GeneralReader):
     """

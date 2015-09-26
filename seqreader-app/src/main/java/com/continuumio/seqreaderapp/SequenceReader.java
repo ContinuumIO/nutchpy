@@ -5,21 +5,23 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.util.ReflectionUtils;
-import org.apache.nutch.scoring.webgraph.LinkDatum;
 import org.apache.nutch.util.NutchConfiguration;
-import py4j.GatewayServer;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 public class SequenceReader {
+    private static final Configuration conf = NutchConfiguration.create();
+    private static final FileSystem fs;
+    static {
+        try {
+            fs = FileSystem.get(conf);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private int nrows = 5;
 
     //convert Java Types to Hadoop Writable Types
@@ -45,9 +47,6 @@ public class SequenceReader {
         // read first nrows from sequence file
 
         List<List> rows=new ArrayList<List>();
-
-        Configuration conf = NutchConfiguration.create();
-        FileSystem fs = FileSystem.get(conf);
 
         Path file = new Path(path);
         System.out.println(file);
@@ -88,10 +87,6 @@ public class SequenceReader {
         // reads the entire contents of the file
 
         List<List> rows=new ArrayList<List>();
-
-        Configuration conf = NutchConfiguration.create();
-        FileSystem fs = FileSystem.get(conf);
-
         Path file = new Path(path);
         System.out.println(file);
 
@@ -125,9 +120,6 @@ public class SequenceReader {
 
         List<List> rows=new ArrayList<List>();
 
-        Configuration conf = NutchConfiguration.create();
-        FileSystem fs = FileSystem.get(conf);
-
         Path file = new Path(path);
         System.out.println(file);
 
@@ -138,43 +130,58 @@ public class SequenceReader {
         Writable value = (Writable)
                 ReflectionUtils.newInstance(reader.getValueClass(), conf);
 
-
         //skip rows
         long i = 0;
-        while(reader.next(key, value)) {
-            if (i == start) {
-                break;
-            }
-            i += 1;
-        }
-
-        while(reader.next(key, value)) {
-            if (i == stop) {
-                break;
-            }
+        for (; i < start && reader.next(key, value); i++ ); //Skip
+        for (; i < stop && reader.next(key, value); i++ ){
             try {
-
                 //hack JAVA tuple construction
                 //need to keep types simple for python conversion
                 List<String> t_row =new ArrayList<String>();
-
                 t_row.add(key.toString());
                 t_row.add(value.toString());
                 rows.add(t_row);
             }
             catch (Exception e) {
+                e.printStackTrace();
             }
-            i += 1;
         }
-
         return rows;
+    }
+
+    /**
+     * Lazily reads the sequence file as and when the records are consumed from
+     * the returned iterator
+     * @param path path of sequence file
+     * @param start starting record number
+     * @return Iterator of Writable list which stores key and value in first two indices
+     * @throws IOException when an error occurs
+     */
+    public static RecordIterator getRecordIterator(String path, long start)
+            throws IOException {
+        return getRecordIterator(path, start, Long.MAX_VALUE);
+    }
+
+    /**
+     * Lazily reads the sequence file as and when the records are consumed from
+     * the returned iterator
+     * @param path - sequence file path
+     * @param start - the starting record number
+     * @param limit - number of records to read
+     * @return Iterator of Writable list which stores key and value in first two indices
+     * @throws IOException when an error occurs
+     */
+    public static RecordIterator getRecordIterator(
+            String path, long start, long limit) throws IOException{
+
+        Path file = new Path(path);
+        System.out.println("Creating document stream from : " + file);
+        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+        return new RecordIterator(reader, start, limit);
     }
 
     public static long count(String path) throws IOException  {
         //read rows between start and stop
-
-         Configuration conf = NutchConfiguration.create();
-        FileSystem fs = FileSystem.get(conf);
 
         Path file = new Path(path);
         System.out.println(file);
@@ -186,11 +193,8 @@ public class SequenceReader {
         Writable value = (Writable)
                 ReflectionUtils.newInstance(reader.getValueClass(), conf);
 
-
         //skip rows
         long i = 0;
-
-
         while(reader.next(key, value)) {
             i += 1;
         }
