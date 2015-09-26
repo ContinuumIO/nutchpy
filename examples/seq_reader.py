@@ -10,7 +10,7 @@ assert len(data) == 5
 
 data = nutchpy.sequence_reader.slice(5,20,path)
 # print(data)
-assert len(data) == 2
+assert len(data) == 3
 
 #hadoop fs -text path <-- equivalent
 data = nutchpy.sequence_reader.read(path)
@@ -26,7 +26,7 @@ count2 = 0
 for doc in docs:
     count2 += 1
 
-assert count2 == count - 1 #FIXME: slice is skipping the first record https://github.com/ContinuumIO/nutchpy/issues/15
+assert count2 == count
 
 limit = 3
 docs = nutchpy.sequence_reader.read_all([path], limit=limit)
