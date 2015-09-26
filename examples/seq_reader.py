@@ -21,7 +21,7 @@ assert len(data) == 8
 count = nutchpy.sequence_reader.count(path)
 assert count == 8
 
-docs = nutchpy.sequence_reader.buffered_read(path)
+docs = nutchpy.sequence_reader.read_iterator(path)
 count2 = 0
 for doc in docs:
     count2 += 1
