@@ -20,4 +20,30 @@ public class SequenceReaderTest extends TestCase {
         List head = SequenceReader.head(2, testFilePath);
         assertEquals(head.get(0), slice.get(0));
     }
+
+    public void testGetRecordStream() throws Exception {
+        RecordIterator iterator =
+                SequenceReader.getRecordIterator(testFilePath, 0);
+        int count = 0;
+        while (iterator.hasNext()){
+            iterator.next();
+            count++;
+        }
+        assertEquals(count, iterator.getNumRecordsRead());
+        assertEquals(NUM_TEST_RECS, count);
+    }
+
+    public void testGetRecordStream1() throws Exception {
+        int start = 2;
+        int limit = 5;
+        RecordIterator iterator = SequenceReader.getRecordIterator(testFilePath,
+                start, limit);
+        int count = 0;
+        while (iterator.hasNext()){
+            iterator.next();
+            count++;
+        }
+        assertEquals(count, iterator.getNumRecordsRead());
+        assertEquals(limit, count);
+    }
 }
