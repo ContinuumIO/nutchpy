@@ -89,4 +89,11 @@ public class RecordIterator implements Iterator<List<Writable>> {
         next = readNext();
         return temp;
     }
+
+    /* JDK 8 has this as default implementation, but we need this for
+     * backward compatibility.
+     */
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }
