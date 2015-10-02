@@ -42,7 +42,6 @@ def launch_gateway():
     logger.debug(java_cmd)
     port = int(ps.stdout.readline())
 
-
     gateway = JavaGateway(GatewayClient(port=port),auto_convert=True)
     logger.info("JAVA GATEWAY STARTED ON PORT: %d"% (port,) )
 
@@ -87,5 +86,11 @@ class NutchJavaGateway:
     if self._gateway is None:
       self._gateway = launch_gateway()
     return self._gateway
+
+  def __del__(self):
+      if self._gateway:
+          logger.info("SHUTTING DOWN JAVA GATEWAY ")
+          self._gateway.shutdown(raise_exception=True)
+          logger.debug("SHUTDOWN COMPLETE")
 
 gateway = NutchJavaGateway().gateway
