@@ -41,7 +41,7 @@ public class LinkReader {
 
         Path file = new Path(path);
 
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+        SequenceFile.Reader reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file));
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
@@ -69,7 +69,7 @@ public class LinkReader {
 
         Path file = new Path(path);
 
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+        SequenceFile.Reader reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file));
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
@@ -103,7 +103,7 @@ public class LinkReader {
 
         Path file = new Path(path);
 
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+        SequenceFile.Reader reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file));
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
@@ -147,7 +147,7 @@ public class LinkReader {
         Path file = new Path(path);
         System.out.println(file);
 
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+        SequenceFile.Reader reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file));
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
