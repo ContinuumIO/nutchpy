@@ -1,27 +1,20 @@
 package com.continuumio.seqreaderapp;
 
-
-import org.apache.hadoop.io.*;
-import org.apache.nutch.util.NutchConfiguration;
-import org.apache.hadoop.util.ReflectionUtils;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import org.apache.hadoop.io.IOUtils;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.Text;
 import py4j.GatewayServer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.io.IOException;
 import java.util.Iterator;
-
-import org.apache.nutch.scoring.webgraph.LinkDatum;
 
 public class App {
     private int nrows = 5;
@@ -84,12 +77,8 @@ public class App {
         System.out.println(key_class.getClass().toString());
         System.out.println(value_class.getClass().toString());
 
-        writer = SequenceFile.createWriter(fs, conf, path,
-                key_class.getClass(), value_class.getClass());
-
-//        key_class.getClass() keyText = (key_class.getClass()) key;
-
-//        writer.append(keyText, value);
+        writer = SequenceFile.createWriter(conf, SequenceFile.Writer.file(path),
+                SequenceFile.Writer.keyClass(key.getClass()), SequenceFile.Writer.valueClass(value.getClass()));
 
         try {
             while (keySetIterator.hasNext()) {

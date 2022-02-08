@@ -11,7 +11,7 @@ import java.net.URI;
 
 import java.io.IOException;
 
-public class SequenceWriter{
+public class SequenceWriter {
     private static final String[] DATA = { "One, two, buckle my shoe",
             "Three, four, shut the door",
             "Five, six, pick up sticks",
@@ -31,8 +31,8 @@ public class SequenceWriter{
         SequenceFile.Writer writer = null;
 
         try {
-            writer = SequenceFile.createWriter(fs, conf, path,
-                    key.getClass(), value.getClass());
+            writer = SequenceFile.createWriter(conf, SequenceFile.Writer.file(path),
+                    SequenceFile.Writer.keyClass(key.getClass()), SequenceFile.Writer.valueClass(value.getClass()));
             for (int i = 0; i < 100; i++) {
                 key.set(100 - i);
                 value.set(DATA[i % DATA.length]);

@@ -3,12 +3,16 @@ package com.continuumio.seqreaderapp;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.*;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.nutch.util.NutchConfiguration;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SequenceReader {
@@ -21,8 +25,6 @@ public class SequenceReader {
             throw new RuntimeException(e);
         }
     }
-
-    private int nrows = 5;
 
     //convert Java Types to Hadoop Writable Types
     public static Object type_to_writable(Object obj) {
@@ -46,12 +48,12 @@ public class SequenceReader {
     public static List head(int nrows, String path) throws IOException {
         // read first nrows from sequence file
 
-        List<List> rows=new ArrayList<List>();
+        List<List> rows = new ArrayList<List>();
 
         Path file = new Path(path);
         System.out.println(file);
 
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+        SequenceFile.Reader reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file));
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
@@ -90,7 +92,7 @@ public class SequenceReader {
         Path file = new Path(path);
         System.out.println(file);
 
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+        SequenceFile.Reader reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file));
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
@@ -123,7 +125,7 @@ public class SequenceReader {
         Path file = new Path(path);
         System.out.println(file);
 
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+        SequenceFile.Reader reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file));
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
@@ -176,7 +178,7 @@ public class SequenceReader {
 
         Path file = new Path(path);
         System.out.println("Creating document stream from : " + file);
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+        SequenceFile.Reader reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file));
         return new RecordIterator(reader, start, limit);
     }
 
@@ -186,7 +188,7 @@ public class SequenceReader {
         Path file = new Path(path);
         System.out.println(file);
 
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, file, conf);
+        SequenceFile.Reader reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file));
 
         Writable key = (Writable)
                 ReflectionUtils.newInstance(reader.getKeyClass(), conf);
@@ -200,7 +202,4 @@ public class SequenceReader {
         }
         return i;
     }
-
 }
-
-
